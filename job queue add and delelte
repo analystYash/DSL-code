@@ -1,0 +1,93 @@
+#include <iostream>
+using namespace std;
+
+class que {
+public:
+    int max;
+    int job[5];
+    int f, r;
+
+    que() {
+        f = 0;
+        r = -1;
+        max = 5;
+    }
+
+    int Is_Empty();
+    int Is_full();
+    void enque();
+    void deque();
+};
+
+int que::Is_Empty() {
+    return f > r; // Queue is empty when front index exceeds rear index
+}
+
+int que::Is_full() {
+    return r == max - 1; // Queue is full when rear reaches max - 1
+}
+
+void que::enque() {
+    char choice;
+    do {
+        int e;
+        cout << "Enter job number to be added: ";
+        cin >> e;
+        if (Is_full()) {
+            cout << "Queue is full.. cannot enter element." << endl;
+        } else {
+            r++;
+            job[r] = e;
+            cout << "Job added: " << e << endl;
+        }
+        cout << "Do you want to enter more job (y/n): ";
+        cin >> choice;
+    } while (choice == 'y');
+}
+
+void que::deque() {
+    char choice;
+    do {
+        if (Is_Empty()) {
+            cout << "Queue is empty, cannot delete the element." << endl;
+        } else {
+            cout << job[f] << " is deleted." << endl;
+            f++;
+            // Reset queue if all elements are deleted
+            if (Is_Empty()) {
+                f = 0;
+                r = -1;
+            }
+        }
+        cout << "Do you want to delete more job (y/n): ";
+        cin >> choice;
+    } while (choice == 'y');
+}
+
+int main() {
+    que q;
+    int ch;
+    char choice;
+    do {
+        cout << "1. Insert job\n2. Delete job" << endl;
+        cin >> ch;
+        switch (ch) {
+        case 1:
+            q.enque();
+            break;
+        case 2:
+            q.deque();
+            break;
+        default:
+            cout << "Invalid choice!" << endl;
+        }
+        cout << "Do you want to operate more job (y/n): ";
+        cin >> choice;
+    } while (choice == 'y');
+
+    cout << "\nJob Queue: ";
+    for (int i = q.f; i <= q.r; i++) { // Loop through the valid range
+        cout << q.job[i] << "\t";
+    }
+    return 0;
+}
