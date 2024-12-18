@@ -1,0 +1,103 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct node {
+    node* prev;
+    int bit;
+    node* next;
+};
+
+class linklist {
+public:
+    node* head;
+    node* tail;
+
+    linklist() {
+        head = NULL;
+        tail = NULL;
+    }
+
+    void insert();
+    void display();
+    void ones_compliment();
+    void twos_compliment();
+};
+
+void linklist::insert() {
+    int n;
+    cout << "Enter the number of bits you want to enter: ";
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        node* nnode = new node;
+        cout << "Enter BIT (0 or 1): ";
+        cin >> nnode->bit;
+
+        nnode->next = NULL;
+        nnode->prev = NULL;
+
+        if (head == NULL && tail == NULL) {
+            head = tail = nnode;
+        } else {
+            tail->next = nnode;
+            nnode->prev = tail;
+            tail = nnode;
+        }
+    }
+}
+
+void linklist::display() {
+    node* temp = head;
+    while (temp != NULL) {
+        cout << temp->bit;
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+void linklist::ones_compliment() {
+    node* temp = head;
+    cout << "1's Complement: ";
+    while (temp != NULL) {
+        cout << (temp->bit == 1 ? 0 : 1);
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+void linklist::twos_compliment() {
+    node* temp = tail;
+    int carry = 1;  
+
+    cout << "2's Complement: ";
+    string result = "";
+    while (temp != NULL) {
+        int new_bit = (temp->bit == 1) ? 0 : 1;  
+        if (carry == 1) {
+            if (new_bit == 1) {
+                result = "0" + result;
+            } else {
+                result = "1" + result;
+                carry = 0;  
+            }
+        } else {
+            result = to_string(new_bit) + result;
+        }
+        temp = temp->prev;
+    }
+
+    cout << result << endl;
+}
+
+int main() {
+    linklist l;
+    l.insert();
+    cout << "Entered binary number is: ";
+    l.display();
+
+    l.ones_compliment();
+    l.twos_compliment();
+
+    return 0;
+}
