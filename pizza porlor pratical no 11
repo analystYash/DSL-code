@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+
+class pizza {
+public:
+    int max;
+    int job[5];
+    int f, r;
+
+    pizza() {
+        f = -1;
+        r = -1;
+        max = 5;
+    }
+
+    int Is_Empty();
+    int Is_full();
+    void order();
+    void serve();
+};
+
+int pizza::Is_Empty() {
+    return (f == -1); // Queue is empty when front is -1
+}
+
+int pizza::Is_full() {
+    return ((r + 1) % max == f); // Queue is full when rear+1 equals front in circular manner
+}
+
+void pizza::order() {
+    char choice;
+    do {
+        int e;
+        cout << "Enter order number to be added: ";
+        cin >> e;
+        if (Is_full()) {
+            cout << "Oven is full.. cannot place order." << endl;
+        } else {
+            if (f == -1) { // If queue is initially empty
+                f = 0;
+            }
+            r = (r + 1) % max; // Circular increment
+            job[r] = e;        // Add order to the queue
+            cout << "Order added: " << e << endl;
+        }
+        cout << "Do you want to add more items (y/n): ";
+        cin >> choice;
+    } while (choice == 'y');
+}
+
+void pizza::serve() {
+    char choice;
+    do {
+        if (Is_Empty()) {
+            cout << "Queue is empty, cannot serve any orders." << endl;
+        } else {
+            cout << "Order " << job[f] << " is served." << endl;
+            if (f == r) { // If queue becomes empty after serving
+                f = -1;
+                r = -1;
+            } else {
+                f = (f + 1) % max; // Circular increment
+            }
+        }
+        cout << "Do you want to serve more pizzas (y/n): ";
+        cin >> choice;
+    } while (choice == 'y');
+}
+
+int main() {
+    pizza p;
+    int ch;
+    char choice;
+    do {
+        cout << "1. Add Order\n2. Serve Order" << endl;
+        cout << "Enter your choice: ";
+        cin >> ch;
+        switch (ch) {
+        case 1:
+            p.order();
+            break;
+        case 2:
+            p.serve();
+            break;
+        default:
+            cout << "Invalid choice!" << endl;
+        }
+        cout << "Do you want to continue (y/n): ";
+        cin >> choice;
+    } while (choice == 'y');
+
+    cout << "\nRemaining Orders in Queue: ";
+    if (p.Is_Empty()) {
+        cout << "No orders left." << endl;
+    } else {
+        int i = p.f;
+        while (true) {
+            cout << p.job[i] << "\t";
+            if (i == p.r)
+                break;
+            i = (i + 1) % p.max; // Circular increment
+        }
+    }
+    return 0;
+}
