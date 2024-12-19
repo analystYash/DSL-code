@@ -1,0 +1,153 @@
+#include<iostream>
+using namespace std;
+
+class Deque {
+public:
+    int max;
+    int job[5];
+    int front, rear;
+
+    Deque() {
+        front = -1;
+        rear = -1;
+        max = 5;
+    }
+
+    int Is_Empty();
+    int Is_Full();
+    void EnqueueFront();
+    void EnqueueRear();
+    void DequeueFront();
+    void DequeueRear();
+    void Display();
+};
+
+int Deque::Is_Empty() {
+    if (front == -1) {
+        return 1;  
+    } else {
+        return 0;  
+    }
+}
+
+int Deque::Is_Full() {
+    if ((rear + 1) % max == front) {
+        return 1;  
+    } else {
+        return 0;  
+    }
+}
+
+void Deque::EnqueueFront() {
+    if (Is_Full()) {
+        cout << "Deque is full.. cannot add element at front." << endl;
+    } else {
+        int e;
+        cout << "Enter job number to be added at front: ";
+        cin >> e;
+
+        if (Is_Empty()) {
+            front = rear = 0;  
+        } else {
+            front = (front - 1 + max) % max;  
+        }
+        job[front] = e;
+        cout << "Job added at front." << endl;
+    }
+}
+
+void Deque::EnqueueRear() {
+    if (Is_Full()) {
+        cout << "Deque is full.. cannot add element at rear." << endl;
+    } else {
+        int e;
+        cout << "Enter job number to be added at rear: ";
+        cin >> e;
+
+        if (Is_Empty()) {
+            front = rear = 0;  
+        } else {
+            rear = (rear + 1) % max;  
+        }
+        job[rear] = e;
+        cout << "Job added at rear." << endl;
+    }
+}
+
+void Deque::DequeueFront() {
+    if (Is_Empty()) {
+        cout << "Deque is empty.. cannot delete element from front." << endl;
+    } else {
+        cout << job[front] << " is deleted from front." << endl;
+
+        if (front == rear) {  
+            front = rear = -1;
+        } else {
+            front = (front + 1) % max;  
+        }
+    }
+}
+
+void Deque::DequeueRear() {
+    if (Is_Empty()) {
+        cout << "Deque is empty.. cannot delete element from rear." << endl;
+    } else {
+        cout << job[rear] << " is deleted from rear." << endl;
+
+        if (front == rear) {  
+            front = rear = -1;
+        } else {
+            rear = (rear - 1 + max) % max; 
+        }
+    }
+}
+
+void Deque::Display() {
+    if (Is_Empty()) {
+        cout << "Deque is empty." << endl;
+    } else {
+        cout << "Jobs in Deque: ";
+        int i = front;
+        while (true) {
+            cout << job[i] << "\t";
+            if (i == rear) break;
+            i = (i + 1) % max;  
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    Deque dq;
+    int ch;
+    char choice;
+
+    do {
+        cout << "1.Insert job at front\n2.Insert job at rear\n3.Delete job from front\n4.Delete job from rear\n5.Display jobs\n";
+        cin >> ch;
+        switch (ch) {
+            case 1:
+                dq.EnqueueFront();
+                break;
+            case 2:
+                dq.EnqueueRear();
+                break;
+            case 3:
+                dq.DequeueFront();
+                break;
+            case 4:
+                dq.DequeueRear();
+                break;
+            case 5:
+                dq.Display();
+                break;
+            default:
+                cout << "Invalid choice." << endl;
+                break;
+        }
+        cout << "Do you want to operate more jobs (y/n): ";
+        cin >> choice;
+    } while (choice == 'y');
+
+    return 0;
+}
